@@ -1,7 +1,6 @@
 # Use an official Node.js runtime as a parent image
 FROM node:18
-# Clone the server project repository
-RUN git clone https://github.com/ArcadaFa1ja/Server.git /server
+
 # Set the working directory to /server
 WORKDIR /server
 
