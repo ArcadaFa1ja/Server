@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '.env' });
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,7 +8,7 @@ const port = 3000;
 
 app.use(cors({
     origin: 'http://localhost:5173', // Match the Vue app's URL. problem då server driftsätts? Länkarna måste iaf ändras i vue komponenter som kopplar sig localhost:3000 (register och fetch komponenter).
-    credentials: true,
+    credentials: true,                                                                          // skapa env variabel istället för att byta ut localhost:3000 manuellt överallt?
 }));
 
 app.use(bodyParser.json());
@@ -64,10 +64,13 @@ app.get('/api/get', async (req, res) => {
     }
 });
 const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL
-  );
+CREATE TABLE IF NOT EXISTS user_settings (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    diets JSONB,
+    widgets JSONB,
+    associations JSONB
+);
 `;
 
 pool.query(createTableQuery, (err, result) => {
@@ -77,9 +80,64 @@ pool.query(createTableQuery, (err, result) => {
         console.log('Table created successfully');
     }
 });
+app.get('/api/getUserSettings/:user_id', async (req, res) => {
+    const user_id = req.params.user_id;
 
+    try {
+        const result = await pool.query('SELECT * FROM user_settings WHERE user_id = $1', [user_id]);
+
+        if (result.rows.length > 0) {
+            const userSettings = result.rows[0];
+            res.json(userSettings);
+        } else {
+            res.status(404).json({ message: 'User settings not found' });
+        }
+    } catch (err) {
+        console.error('Error executing query', err.stack);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+// Check if username exists
+app.get('/api/checkUsername/:username', async (req, res) => {
+    const sanitizedUsername = req.params.username.replace(/[^a-z0-9\_\-]/gi, '');
+    if (sanitizedUsername) {
+        try {
+            // Adjust the query for case-insensitive comparison if needed
+            const result = await pool.query('SELECT * FROM user_settings WHERE LOWER(username) = LOWER($1)', [sanitizedUsername]);
+            if (result.rows.length > 0) {
+                res.json({ exists: true, user: result.rows[0] });
+            } else {
+                res.json({ exists: false });
+            }
+        } catch (err) {
+            console.error('Error executing query', err.stack);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    } else {
+        res.status(400).json({ message: 'Invalid username format' });
+    }
+});
+//Inloggning med username
+app.post('/api/login', async (req, res) => {
+    const { username } = req.body;
+
+    try {
+    
+        const result = await pool.query('SELECT * FROM user_settings WHERE LOWER(username) = LOWER($1)', [username]);
+
+        if (result.rows.length > 0) {
+            const user = result.rows[0];
+            res.json({ login: true, user_id: user.user_id });
+        } else {
+            res.json({ login: false, message: 'Invalid credentials' });
+        }
+    } catch (err) {
+        console.error('Error executing query', err.stack);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 // Insert data into the table
-app.post('/addUser', (req, res) => {
+app.post('api/addUser', (req, res) => {
     const { username } = req.body;
 
     const insertQuery = `
@@ -99,7 +157,19 @@ app.post('/addUser', (req, res) => {
     });
 });
 
+app.put('/api/updateUserSettings', async (req, res) => {
+    const { user_id, widgets, diets, associations } = req.body;
 
+    try {
+        const result = await pool.query('UPDATE user_settings SET widgets = $1, diets = $2, associations = $3 WHERE user_id = $4', [widgets, diets, associations, user_id]);
+        //console.log('Update Query:', 'UPDATE user_settings SET widgets = $1, diets = $2, associations = $3 WHERE user_id = $4', [widgets, diets, associations, user_id]);
+
+        res.json({ message: 'User settings update successful', rowsAffected: result.rowCount });
+    } catch (err) {
+        console.error('Error executing query', err.stack);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 //Organisationer för kide fetch
 let orgs = {
     TLK:
