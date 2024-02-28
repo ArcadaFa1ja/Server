@@ -54,11 +54,11 @@ In case of an error, it logs an error message with the details of the error stac
 - **Endpoint:** `POST api/addUser`
 - **Description:** Adds a new user to the 'user_settings' table.
 - **Request payload:**
-```json
-{
-  "username":"newUser"
-}
-```
+  ```json
+  {
+    "username":"newUser"
+  }
+  ```
 - **Response:** JSON object with the new username.
 #### e. Update user settings
 - **Endpoint:** `PUT api/updateUserSettings`
