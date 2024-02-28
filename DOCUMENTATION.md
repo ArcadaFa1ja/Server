@@ -26,7 +26,10 @@
 
 ### 2. Database Connection
 
-- **Description:** Establishes a connection to the PostgreSQL database using the `pg` library.
+- **Description:** Establishes a connection to the PostgreSQL database using the `pg` library. Tests the connection to the PostgreSQL database by executing a simple query on start to retrieve the current timestamp.
+- **Query:** `SELECT NOW()`
+- **Response:** If the query is executed successfully, it logs a message confirming the successful database connection and prints the current timestamp.
+In case of an error, it logs an error message with the details of the error stack.
 
 ### 3. User settings
 #### a. Get User Settings
