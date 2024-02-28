@@ -122,9 +122,9 @@ app.get('/api/checkUsername/:username', async (req, res) => {
 //Inloggning med username
 app.post('/api/login', async (req, res) => {
     const { username } = req.body;
-
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9_\-]/g, '');
     try {
-        const result = await pool.query('SELECT * FROM user_settings WHERE username = $1', [username]);
+        const result = await pool.query('SELECT * FROM user_settings WHERE username = $1', [sanitizedUsername]);
 
         if (result.rows.length > 0) {
             // User exists
@@ -141,9 +141,9 @@ app.post('/api/login', async (req, res) => {
 // Insert data into the table
 app.post('/api/addUser', async (req, res) => {
     const { username } = req.body;
-
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9_\-]/g, '');
     try {
-        const result = await pool.query('INSERT INTO user_settings (username) VALUES ($1) RETURNING *', [username]);
+        const result = await pool.query('INSERT INTO user_settings (username) VALUES ($1) RETURNING *', [sanitizedUsername]);
 
         if (result.rows.length > 0) {
             res.json({ user: result.rows[0] });
