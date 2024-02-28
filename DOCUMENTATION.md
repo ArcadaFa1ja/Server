@@ -46,4 +46,8 @@
     "username":"example_user"
   }
   ```
+- **Response:** JSON object indicating login success or failure.
+#### d. Add user
+- **Endpoint:** `POST api/addUser`
+- **Description:** Adds a new user to the 'users' table !!users table doesn't exist!!
   
