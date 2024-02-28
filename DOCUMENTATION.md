@@ -29,15 +29,15 @@
 - **Description:** Establishes a connection to the PostgreSQL database using the `pg` library.
 
 ### 3. User settings
-  #### a. Get User Settings
+#### a. Get User Settings
 - **Endpoint:** `GET /api/getUserSettings/:user_id`
 - **Description:** Retrieves user settings based on user ID.
 - **Response:** JSON object with user settings or a 404 error if not found.
-  #### b. Check Username
+#### b. Check Username
 - **Endpoint:** `GET /api/checkUsername/:username`
 - **Description:** Checks if a username exists in the 'user_settings' table.
 - **Response:** JSON object indicating whether the username exists.
-  #### c. Login
+#### c. Login
 - **Endpoint:** `POST api/login`
 - **Description:** Authenticates / logs in user based on username.
 - **Request payload:**
