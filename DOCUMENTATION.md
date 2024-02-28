@@ -59,7 +59,7 @@ In case of an error, it logs an error message with the details of the error stac
 "username":"newUser"
 }
 ```
--**Response:** JSON object with the new username.
+- **Response:** JSON object with the new username.
 #### e. Update user settings
 - **Endpoint:** `PUT api/updateUserSettings`
 - **Description:** Updates user settings.
