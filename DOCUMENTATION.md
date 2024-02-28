@@ -56,7 +56,7 @@ In case of an error, it logs an error message with the details of the error stac
 - **Request payload:**
 ```json
 {
-"username":"newUser"
+  "username":"newUser"
 }
 ```
 - **Response:** JSON object with the new username.
