@@ -74,7 +74,7 @@ In case of an error, it logs an error message with the details of the error stac
     "scheduleLink": "https://your-schedule-link.fi/1234xyz"
   }
 ```
--**Response:** JSON object with a message indicating success and the number of rows affected.
+- **Response:** JSON object with a message indicating success and the number of rows affected.
 
 ### 6. Kide Fetch
 - **Endpoint:** `GET api/getKide`
