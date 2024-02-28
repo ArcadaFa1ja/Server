@@ -49,5 +49,38 @@
 - **Response:** JSON object indicating login success or failure.
 #### d. Add user
 - **Endpoint:** `POST api/addUser`
-- **Description:** Adds a new user to the 'users' table !!users table doesn't exist!!
+- **Description:** Adds a new user to the 'user_settings' table.
+- **Request payload:**
+```json
+{
+"username":"newUser"
+}
+```
+-**Response:** JSON object with the new username.
+#### e. Update user settings
+- **Endpoint:** `PUT api/updateUserSettings`
+- **Description:** Updates user settings.
+- **Request payload:**
+ ```json
+  {
+    "user_id": 1,
+    "widgets": {...},
+    "diets": {...},
+    "associations": {...},
+    "weatherApiKey": "your_api_key",
+    "scheduleLink": "https://your-schedule-link.fi/1234xyz"
+  }
+```
+-**Response:** JSON object with a message indicating success and the number of rows affected.
+
+### 6. Kide Fetch
+- **Endpoint:** `GET api/getKide`
+- **Description:** Fetches data from Kide API for different organizations.
+- **Response:** JSON object with Kide data for all organizations.
+
+### 7. Restaurants
+- **Endpoint:** `GET api/getMenu` 
+- **Description:** Fetches menu data for different restaurants.
+- **Response:** JSON object with menu data for all restaurants.
+
   
