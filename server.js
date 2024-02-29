@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS user_settings (
     username VARCHAR(50) UNIQUE NOT NULL,
     diets JSONB,
     widgets JSONB,
-    associations JSONB
-    weatherApiKey VARCHAR(255)
+    associations JSONB,
+    weatherApiKey VARCHAR(255),
     schedule VARCHAR(255)
 );
 `;
